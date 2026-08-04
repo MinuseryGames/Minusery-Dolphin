@@ -51,9 +51,9 @@ Built on Dolphin 2606. %CHECK_FOR_UPDATES%: <a href='https://projectplusgame.com
 </p>
 
 <p>
-<a href='https://github.com/Project-Plus-Development-Team/Project-Plus-Dolphin/blob/master/COPYING'>License</a> |
+<a href='https://github.com/MinuseryGames/Minusery-Dolphin/blob/master/COPYING'>License</a> |
 <a href='https://github.com/dolphin-emu/dolphin/graphs/contributors'>Dolphin Authors</a> |
-<a href='https://discord.gg/vdssRDg'>Setup Support</a>
+<a href='https://discord.gg/42knFRt'>Setup Support</a>
 )")
           .replace(QStringLiteral("%VERSION_STRING%"),
                    QString::fromUtf8(Common::GetScmDescStr().c_str()))

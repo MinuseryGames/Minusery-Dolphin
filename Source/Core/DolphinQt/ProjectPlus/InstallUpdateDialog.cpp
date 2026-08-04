@@ -232,7 +232,7 @@ void InstallUpdateDialog::install()
   this->updateGeometry();
   QThread::msleep(100);
   
-  QString extractDirectory = this->temporaryDirectory + QDir::separator() + QStringLiteral("Project-Plus-Dolphin");
+  QString extractDirectory = this->temporaryDirectory + QDir::separator() + QStringLiteral("Minusery-Dolphin");
 
   if (this->filename.endsWith(QStringLiteral(".zip")))
   {
@@ -246,7 +246,7 @@ void InstallUpdateDialog::install()
     QDir dir(this->temporaryDirectory);
     if (!QDir(extractDirectory).exists())
     {
-      if (!dir.mkdir(QStringLiteral("Project-Plus-Dolphin")))
+      if (!dir.mkdir(QStringLiteral("Minusery-Dolphin")))
       {
         QMessageBox::critical(this, QStringLiteral("Error"),
                               QStringLiteral("Failed to create extract directory."));
@@ -256,7 +256,7 @@ void InstallUpdateDialog::install()
     }
 
     // Attempt to unzip files into the extract directory
-    if (!unzipFile(fullFilePath.toStdString(), extractDirectory.toStdString(), 
+    if (!unzipFile(fullFilePath.toStdString(), extractDirectory.toStdString(),
                    [this](int current, int total) {
                        // Update step progress bar (0-100%)
                        int extractionProgress = (current * 100) / total;

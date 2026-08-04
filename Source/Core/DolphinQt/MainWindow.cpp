@@ -713,7 +713,7 @@ void MainWindow::ConnectToolBar()
   connect(m_tool_bar, &ToolBar::SettingsPressed, this, &MainWindow::ShowSettingsWindow);
   connect(m_tool_bar, &ToolBar::ControllersPressed, this, &MainWindow::ShowControllersWindow);
   connect(m_tool_bar, &ToolBar::GraphicsPressed, this, &MainWindow::ShowGraphicsWindow);
-  connect(m_tool_bar, &ToolBar::InstallUpdateManuallyPressed, this, &MainWindow::ShowUpdateDialog);  
+  connect(m_tool_bar, &ToolBar::InstallUpdateManuallyPressed, this, &MainWindow::ShowUpdateDialog);
 
   connect(m_tool_bar, &ToolBar::StepPressed, m_code_widget, &CodeWidget::Step);
   connect(m_tool_bar, &ToolBar::StepOverPressed, m_code_widget, &CodeWidget::StepOver);
@@ -1433,7 +1433,7 @@ void MainWindow::ShowUpdateDialog()
     Common::HttpRequest httpRequest;
 
     // Make the GET request
-    auto response = httpRequest.Get("https://api.github.com/repos/Project-Plus-Development-Team/Project-Plus-Dolphin/releases/latest");
+    auto response = httpRequest.Get("https://api.github.com/repos/MinuseryGames/Minusery-Dolphin/releases/latest");
 
     if (response)
     {
@@ -1469,7 +1469,7 @@ void MainWindow::CheckForUpdatesAuto()
     Common::HttpRequest httpRequest;
 
     // Make the GET request
-    auto response = httpRequest.Get("https://api.github.com/repos/Project-Plus-Development-Team/Project-Plus-Dolphin/releases/latest");
+    auto response = httpRequest.Get("https://api.github.com/repos/MinuseryGames/Minusery-Dolphin/releases/latest");
 
     if (response)
     {
