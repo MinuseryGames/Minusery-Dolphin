@@ -1,11 +1,11 @@
-# Project+ Dolphin Fork
+# Project+ Dolphin Fork for Brawl Minus
 
 ![Untitled-1](https://github.com/user-attachments/assets/3bfb148a-85d1-489d-96ae-1b7892acdc11)
 
 
-This fork is a heavily modified version of the Dolphin Emulator designed for usage with Project+. It includes the following features:
+This fork is a heavily modified version of the Dolphin Emulator designed for usage with Brawl Minus. It includes the following features:
 
-  * Branding, theming and iconography updates to match the Project+ aesthetic
+  * Branding, theming and iconography updates to match the Brawl Minus aesthetic
   * Netplay button on the toolbar
   * Update button on the toolbar
   * Specific aspect ratios (19:15 and 69:40 for regular and widescreen, respectively)
@@ -20,7 +20,7 @@ This fork is a heavily modified version of the Dolphin Emulator designed for usa
   * Automatic export of Brawl vault data at the end of netplay sessions
   * Alternative implementation for automatic updates that fetch the latest GitHub release
  
-This project would not be possible without the work done by the [Faster Melee](https://github.com/FasterMelee/Ishiiruka), [Faster PM](https://github.com/jlambert360/Ishiiruka), [Slippi](https://github.com/project-slippi/dolphin), and [Mario Party Netplay](https://github.com/MarioPartyNetplay/Dolphin-MPN) teams. 
+This project would not be possible without the work done by the [Faster Melee](https://github.com/FasterMelee/Ishiiruka), [Faster PM](https://github.com/jlambert360/Ishiiruka), [Slippi](https://github.com/project-slippi/dolphin), and [Mario Party Netplay](https://github.com/MarioPartyNetplay/Dolphin-MPN) teams.
 
 # Dolphin - A GameCube and Wii Emulator
 
@@ -78,10 +78,10 @@ The "Debug" solution configuration is significantly slower, more verbose and les
 
 ## Building for Linux and macOS
 
-Dolphin requires [CMake](https://cmake.org/) for systems other than Windows. 
+Dolphin requires [CMake](https://cmake.org/) for systems other than Windows.
 You need a recent version of GCC or Clang with decent c++20 support. CMake will
 inform you if your compiler is too old.
-Many libraries are bundled with Dolphin and used if they're not installed on 
+Many libraries are bundled with Dolphin and used if they're not installed on
 your system. CMake will inform you if a bundled library is used or if you need
 to install any missing packages yourself. You may refer to the [wiki](https://github.com/dolphin-emu/dolphin/wiki/Building-for-Linux) for more information.
 
@@ -92,7 +92,7 @@ git submodule update --init --recursive
 
 ### macOS Build Steps:
 
-A binary supporting a single architecture can be built using the following steps: 
+A binary supporting a single architecture can be built using the following steps:
 
 1. `mkdir build`
 2. `cd build`
@@ -110,8 +110,8 @@ application bundle using the following steps:
 4. Universal binaries will be available in the `universal` folder
 
 Doing this is more complex as it requires installation of library dependencies for both x64 and ARM (or universal library
-equivalents) and may require specifying additional arguments to point to relevant library locations. 
-Execute BuildMacOSUniversalBinary.py --help for more details.  
+equivalents) and may require specifying additional arguments to point to relevant library locations.
+Execute BuildMacOSUniversalBinary.py --help for more details.
 
 ### Linux Global Build Steps:
 
@@ -147,7 +147,7 @@ Or useful for having multiple distinct Dolphin setups for testing/development/TA
 
 ### Linux AppImage Build Steps:
 
-Used for distribution of Project+ builds.
+Used for distribution of Brawl Minus builds.
 
 1. `mkdir Build`
 2. `cd Build`

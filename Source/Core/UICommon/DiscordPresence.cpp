@@ -101,9 +101,9 @@ std::string ArtworkForGameId()
   const bool is_wii = Core::System::GetInstance().IsWii();
   const std::string region_code = SConfig::GetInstance().GetGameTDBImageRegionCode(is_wii, region);
 
-  if (SConfig::GetInstance().GetGameTDBID() == "RSBE01" || "ID-Project+ Netplay Launcher")
+  if (SConfig::GetInstance().GetGameTDBID() == "RSBE01" || "ID-Brawl Minus Netplay Launcher")
   {
-    static constexpr char cover_url[] = "https://art.gametdb.com/wii/coverB/US/RSBEPL.png";
+    static constexpr char cover_url[] = "https://forums.brawlminus.net/discordBox.png";
     return fmt::format(cover_url, region_code, SConfig::GetInstance().GetGameTDBID());
   }
   else
@@ -222,13 +222,13 @@ void UpdateDiscordPresence(int party_size, SecretType type, const std::string& s
   DiscordRichPresence discord_presence = {};
   if (game_artwork.empty())
   {
-    discord_presence.largeImageKey = "https://art.gametdb.com/wii/coverB/US/RSBEPL.png";
-    discord_presence.largeImageText = "Project+";
+    discord_presence.largeImageKey = "https://forums.brawlminus.net/discordBox.png";
+    discord_presence.largeImageText = "Brawl Minus";
   }
-  else if (SConfig::GetInstance().GetGameID() == "RSBE01" || "ID-Project+ Netplay Launcher")
+  else if (SConfig::GetInstance().GetGameID() == "RSBE01" || "ID-Brawl Minus Netplay Launcher")
   {
-    discord_presence.largeImageKey = "https://art.gametdb.com/wii/coverB/US/RSBEPL.png";
-    discord_presence.largeImageText = "Project+";
+    discord_presence.largeImageKey = "https://forums.brawlminus.net/discordBox.png";
+    discord_presence.largeImageText = "Brawl Minus";
     discord_presence.smallImageKey = "dolphin_logo";
     discord_presence.smallImageText = "Dolphin is an emulator for the GameCube and the Wii.";
   }
@@ -241,9 +241,9 @@ void UpdateDiscordPresence(int party_size, SecretType type, const std::string& s
   }
   if (title.empty())
     discord_presence.details = "Not in-game";
-  else if (SConfig::GetInstance().GetGameID() == "RSBE01" || "ID-Project+ Netplay Launcher")
+  else if (SConfig::GetInstance().GetGameID() == "RSBE01" || "ID-Brawl Minus Netplay Launcher")
   {
-    discord_presence.details = "Project+";
+    discord_presence.details = "Brawl Minus";
   }
   else
     discord_presence.details = title.c_str();

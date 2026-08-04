@@ -1,30 +1,33 @@
-name: Project+ Dolphin Builder
+name: Brawl Minus Dolphin Builder
 
 on: [push, pull_request]
 
-jobs: 
+jobs:
   build_windows_x86_64:
     name: Windows Build
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
       with:
-        repository: Project-Plus-Development-Team/Project-Plus-Dolphin
+        repository: MinuseryGames/Minusery-Dolphin
         ref: master
         fetch-depth: 0
-    - name: Setup Submodules
-      run: git config --global --add safe.directory . && git submodule update --init --recursive
+        submodules: recursive
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.0.2
-      with:
-        vs-version: '16.6.2'
+      uses: microsoft/setup-msbuild@v3
     - name: Build
-      run: msbuild "Source\dolphin-emu.sln" /verbosity:minimal /property:Configuration=Release /property:Platform=x64
+      shell: pwsh
+      run: |
+        msbuild Source\dolphin-emu.sln `
+          /m `
+          /verbosity:normal `
+          /p:Configuration=Release `
+          /p:Platform=x64 `
     - name: Upload Build Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
-        name: Project-Plus-Dolphin-Windows-${{ env.DOLPHINVER }}
+        name: Brawl-Minus-Dolphin-Windows-${{ env.DOLPHINVER }}
         path: Binary/x64/
         
   build_macos:
@@ -39,9 +42,9 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
-          repository: Project-Plus-Development-Team/Project-Plus-Dolphin
+          repository: MinuseryGames/Minusery-Dolphin
           ref: master
           submodules: recursive
           fetch-depth: 0
@@ -50,6 +53,7 @@ jobs:
         env:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
           HOMEBREW_NO_ANALYTICS: 1
+          HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
         run: |
           brew install gnu-sed
           if ! brew install ccache ninja libspng; then
@@ -59,7 +63,7 @@ jobs:
 
       - name: Cache Dependencies
         id: cache-deps
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/deps
           key: macOS deps ${{ hashFiles('.github/workflows/scripts/macos/build-dependencies.sh') }}
@@ -68,40 +72,13 @@ jobs:
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: .github/workflows/scripts/macos/build-dependencies.sh
 
-      - name: Cache MoltenVK
-        id: cache-moltenvk
-        uses: actions/cache@v4
-        with:
-          path: ~/moltenvk
-          key: macOS MoltenVK ${{ hashFiles('Externals/MoltenVK') }}
-
-      - name: Build MoltenVK
-        if: steps.cache-moltenvk.outputs.cache-hit != 'true'
-        run: |
-          MVK_VER="$(sed -nr 's/^.*set\(MOLTENVK_VERSION "([^"]+)".*$/\1/p' Externals/MoltenVK/CMakeLists.txt)"
-          if [ -z "$MVK_VER" ]; then
-            echo "::error::Failed to parse MoltenVK version from CMakeLists"
-            exit 1
-          fi
-          git clone --depth 1 --branch "$MVK_VER" https://github.com/KhronosGroup/MoltenVK.git mvk-build
-          pushd mvk-build
-          git apply ../Externals/MoltenVK/patches/*.patch
-          ./fetchDependencies --macos
-          make macos
-          ls -l Package/Release/MoltenVK/dynamic/*
-          chmod 755 Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib
-          mkdir -p "$HOME/moltenvk/lib/"
-          mv Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib "$HOME/moltenvk/lib/"
-          popd
-          rm -rf mvk-build
-
       # -- SETUP CCACHE - https://cristianadam.eu/20200113/speeding-up-c-plus-plus-github-actions-using-ccache/
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
         run: echo "timestamp=$(date -u "+%Y-%m-%d-%H;%M;%S")" >> $GITHUB_OUTPUT
 
       - name: Cache ccache cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .ccache
           key: macOS ccache ${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -110,9 +87,9 @@ jobs:
       - name: Generate CMake Files
         run: |
           COMMON_ARGS=(
-            -DCMAKE_PREFIX_PATH="$HOME/deps;$HOME/moltenvk"
+            -DCMAKE_PREFIX_PATH="$HOME/deps"
             -DCMAKE_BUILD_TYPE=Release
-            -DUSE_BUNDLED_MOLTENVK=OFF
+            -DUSE_BUNDLED_MOLTENVK=ON
             -DMACOS_CODE_SIGNING=OFF
             -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
             -DCMAKE_C_COMPILER_LAUNCHER=ccache
@@ -141,7 +118,7 @@ jobs:
                 -B build-arm .
 
       - name: Purge .git for space reasons
-        run: rm -rf /home/runner/work/Project-Plus-Dolphin-src/.git
+        run: rm -rf /home/runner/work/Minusery-Dolphin-src/.git
       - name: Build Dolphin (x86_64)
         working-directory: build
         run: |
@@ -158,7 +135,7 @@ jobs:
       #    ccache -s
       #    ccache -z
       #    ninja project-plus-dolphin
-      #    ccache -s 
+      #    ccache -s
 
       - name: Prepare Build Artifacts
         id: create-artifact
@@ -180,13 +157,13 @@ jobs:
           else
             SUFFIX="sha[$(git rev-parse --short HEAD)]"
           fi
-          APPNAME="Project-Plus-Dolphin-macOS-$SUFFIX"
+          APPNAME="Brawl-Minus-Dolphin-macOS-$SUFFIX"
           mv build/Binaries/DolphinQt.app "$APPNAME.app"
           tar --options xz:compression-level=9 -cvJf "$APPNAME.tar.xz" "$APPNAME.app"
           echo "name=$APPNAME" >> "$GITHUB_OUTPUT"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.create-artifact.outputs.name }}
           path: "*.tar.xz"
@@ -198,19 +175,19 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-nightly
       options: --privileged
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - name: Purge .git for space reasons
-      run: rm -rf /home/runner/work/Project-Plus-Dolphin-src/.git && rm -rf /home/runner/actions-runner/cached/_diag/* && rm -rf /home/runner/actions-runner/_work/_temp/ && rm -rf /home/runner/actions-runner/_work/_tool/*
+      run: rm -rf /home/runner/work/Minusery-Dolphin-src/.git && rm -rf /home/runner/actions-runner/cached/_diag/* && rm -rf /home/runner/actions-runner/_work/_temp/ && rm -rf /home/runner/actions-runner/_work/_tool/*
     - name: Setup Packages
       run: |
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
-        flatpak install org.kde.Sdk//5.15 org.kde.Platform//5.15 -y && \
+        flatpak install org.kde.Sdk//6.6 org.kde.Platform//6.6 -y && \
         dnf install libusb1-devel cmake git gcc-c++ libXext-devel libgudev qt6-qtbase-devel systemd-devel openal-soft-devel libevdev-devel libao-devel SOIL-devel libXrandr-devel pulseaudio-libs-devel bluez-libs-devel p7zip SDL2-devel make automake gcc gcc-c++ kernel-devel -y
     - name: Run Flatpak Builder
       uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
         manifest-path: Distribution/flatpak/flatpak.yml
-        bundle: Project-Plus-Dolphin-${{ env.DOLPHINVER }}.flatpak
+        bundle: Brawl-Minus-Dolphin-${{ env.DOLPHINVER }}.flatpak
         
   build_appimage:
     name: AppImage Build
@@ -219,9 +196,9 @@ jobs:
       yaqti: 6.7.3
     steps:
     - name: Checkout Upstream Repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
-        repository: Project-Plus-Development-Team/Project-Plus-Dolphin
+        repository: MinuseryGames/Minusery-Dolphin
         ref: master
         fetch-depth: 0
 
@@ -230,7 +207,7 @@ jobs:
       run: git submodule update --init --recursive -j $(getconf _NPROCESSORS_ONLN)
 
     - name: Checkout AppImage Repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
           clean: false
           path: ci
@@ -242,7 +219,7 @@ jobs:
         echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
       shell: bash
     - name: cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.ccache
         key: build-ccache-${{ steps.get-date.outputs.date }}
@@ -270,7 +247,7 @@ jobs:
       run: |
         PATCHELFVER=0.14.5
         curl -sL https://github.com/NixOS/patchelf/releases/download/${PATCHELFVER}/patchelf-${PATCHELFVER}-x86_64.tar.gz -o /tmp/patchelf.tar.gz
-        tar -xvf /tmp/patchelf.tar.gz --directory /tmp/ ./bin/patchelf --strip-components=2 
+        tar -xvf /tmp/patchelf.tar.gz --directory /tmp/ ./bin/patchelf --strip-components=2
         sudo mv /tmp/patchelf /usr/bin
         patchelf --version
     - name: Build Dolphin
@@ -299,7 +276,7 @@ jobs:
         echo "PATH $PATH"
         sudo ln -s ${GITHUB_WORKSPACE}/$(find qt/ -name qmake) /usr/bin
         qmake -v
-        cd /tmp 
+        cd /tmp
         curl -sSfLO "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
         curl -sSfLO "https://github.com/AppImage/AppImageUpdate/releases/download/continuous/AppImageUpdate-x86_64.AppImage"
         chmod a+x linuxdeploy*.AppImage
@@ -323,7 +300,7 @@ jobs:
         chmod a+x ./squashfs-root/runtime
         chmod a+x ./squashfs-root/AppRun-patched
         chmod a+x ./squashfs-root/update.sh
-        export UPD_INFO="gh-releases-zsync|Project-Plus-Development-Team|Project-Plus-Dolphin|continuous|Project+_Dolphin-x86_64.AppImage.zsync"
+        export UPD_INFO="gh-releases-zsync|MinuseryGames|Minusery-Dolphin|continuous|Brawl-Minus_Dolphin-x86_64.AppImage.zsync"
         /tmp/squashfs-root/AppRun --appdir="$GITHUB_WORKSPACE"/squashfs-root/ --plugin qt -d "$GITHUB_WORKSPACE"/squashfs-root/project-plus-dolphin.desktop -i "$GITHUB_WORKSPACE"/squashfs-root/project-plus-dolphin.svg \
         --exclude-library=libglib* --output appimage
         ls . | grep *.AppImage
@@ -333,13 +310,13 @@ jobs:
         cat "$GITHUB_WORKSPACE"/squashfs-root/AppRun
         /tmp/squashfs-root/usr/bin/linuxdeploy-plugin-appimage --appdir="$GITHUB_WORKSPACE"/squashfs-root/
         ls . | grep *.AppImage
-        mv Project+_Dolphin-x86_64.AppImage $GITHUB_WORKSPACE/uploads/Dolphin_${DOLPHINVER}.AppImage
+        mv *.AppImage $GITHUB_WORKSPACE/uploads/
         ls -al $GITHUB_WORKSPACE/uploads
       continue-on-error: true
     - name: Upload Static Build
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
-        name: Project-Plus-Dolphin-AppImage-${{ env.DOLPHINVER }}
+        name: Brawl-Minus-Dolphin-AppImage-${{ env.DOLPHINVER }}
         path: uploads/
       env:
         DEFAULT_BRANCH: git-actions
