@@ -1,6 +1,12 @@
 name: Brawl Minus Dolphin Builder
 
-on: [push, pull_request]
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on tags starting with 'v' (e.g., v1.0)
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build_windows_x86_64:
@@ -91,6 +97,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release
             -DUSE_BUNDLED_MOLTENVK=ON
             -DMACOS_CODE_SIGNING=OFF
+            -DPOSTPROCESS_BUNDLE=ON
             -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
             -DCMAKE_C_COMPILER_LAUNCHER=ccache
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
@@ -183,6 +190,15 @@ jobs:
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
         flatpak install org.kde.Sdk//6.6 org.kde.Platform//6.6 -y && \
         dnf install libusb1-devel cmake git gcc-c++ libXext-devel libgudev qt6-qtbase-devel systemd-devel openal-soft-devel libevdev-devel libao-devel SOIL-devel libXrandr-devel pulseaudio-libs-devel bluez-libs-devel p7zip SDL2-devel make automake gcc gcc-c++ kernel-devel -y
+    - name: Pin Flatpak manifest to workflow ref
+      run: |
+        sed -i '/^[[:space:]]*tag:[[:space:]]/d' Distribution/flatpak/flatpak.yml
+        sed -i '/^[[:space:]]*commit:[[:space:]]/d' Distribution/flatpak/flatpak.yml
+        sed -i "/^[[:space:]]*url:[[:space:]]*https:\/\/github.com\/Project-Plus-Development-Team\/Project-Plus-Dolphin$/a\\        commit: ${GITHUB_SHA}" Distribution/flatpak/flatpak.yml
+        if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+          sed -i "/^[[:space:]]*url:[[:space:]]*https:\/\/github.com\/Project-Plus-Development-Team\/Project-Plus-Dolphin$/a\\        tag: ${GITHUB_REF_NAME}" Distribution/flatpak/flatpak.yml
+        fi
+        grep -n "^[[:space:]]*\(tag:\|commit:\)" Distribution/flatpak/flatpak.yml
     - name: Run Flatpak Builder
       uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:

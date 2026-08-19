@@ -270,8 +270,10 @@ MainWindow::MainWindow(Core::System& system, std::unique_ptr<BootParameters> boo
   InitCoreCallbacks();
 
   NetPlayInit();
-  
+
+#ifdef SHOW_UPDATER
   CheckForUpdatesAuto();
+#endif  // SHOW_UPDATER
 
 #ifdef USE_RETRO_ACHIEVEMENTS
   AchievementManager::GetInstance().Init(reinterpret_cast<void*>(winId()));
@@ -612,7 +614,9 @@ void MainWindow::ConnectMenuBar()
           &GameList::OnGameListVisibilityChanged);
 
   connect(m_menu_bar, &MenuBar::ShowAboutDialog, this, &MainWindow::ShowAboutDialog);
+#ifdef SHOW_UPDATER
   connect(m_menu_bar, &MenuBar::ShowUpdateDialog, this, &MainWindow::ShowUpdateDialog);
+#endif  // SHOW_UPDATER
 
   connect(m_game_list, &GameList::SelectionChanged, m_menu_bar, &MenuBar::SelectionChanged);
   connect(this, &MainWindow::ReadOnlyModeChanged, m_menu_bar, &MenuBar::ReadOnlyModeChanged);
@@ -713,7 +717,9 @@ void MainWindow::ConnectToolBar()
   connect(m_tool_bar, &ToolBar::SettingsPressed, this, &MainWindow::ShowSettingsWindow);
   connect(m_tool_bar, &ToolBar::ControllersPressed, this, &MainWindow::ShowControllersWindow);
   connect(m_tool_bar, &ToolBar::GraphicsPressed, this, &MainWindow::ShowGraphicsWindow);
+  #ifdef SHOW_UPDATER
   connect(m_tool_bar, &ToolBar::InstallUpdateManuallyPressed, this, &MainWindow::ShowUpdateDialog);
+  #endif  // SHOW_UPDATER
 
   connect(m_tool_bar, &ToolBar::StepPressed, m_code_widget, &CodeWidget::Step);
   connect(m_tool_bar, &ToolBar::StepOverPressed, m_code_widget, &CodeWidget::StepOver);
@@ -1428,6 +1434,7 @@ void MainWindow::ShowAboutDialog()
 
 // P+ change: New updater; credit to RainbowTabitha and the Mario Party Netplay team for the base code!
 
+#ifdef SHOW_UPDATER
 void MainWindow::ShowUpdateDialog()
 {
     Common::HttpRequest httpRequest;
@@ -1497,6 +1504,7 @@ void MainWindow::CheckForUpdatesAuto()
         QMessageBox::critical(this, tr("Error"), tr("Failed to fetch update information."));
     }
 }
+#endif  // SHOW_UPDATER
 
 void MainWindow::ShowHotkeyDialog()
 {
