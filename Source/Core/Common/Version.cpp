@@ -9,7 +9,7 @@
 
 namespace Common
 {
-#define EMULATOR_NAME "Brawl Minus Dolphin"
+#define EMULATOR_NAME "Brawl Minus Dolphin v5.1.5"
 
 #ifdef _DEBUG
 #define BUILD_TYPE_STR "Debug "
@@ -27,13 +27,7 @@ const std::string& GetEmulatorName()
 
 const std::string& GetScmRevStr()
 {
-  static const std::string scm_rev_str = EMULATOR_NAME " "
-
-#ifdef __INTEL_COMPILER
-      BUILD_TYPE_STR SCM_DESC_STR "-ICC";
-#else
-      BUILD_TYPE_STR SCM_DESC_STR "";
-#endif
+  static const std::string scm_rev_str = EMULATOR_NAME;
   return scm_rev_str;
 }
 
@@ -75,13 +69,7 @@ const std::string& GetScmUpdateTrackStr()
 
 const std::string& GetNetplayDolphinVer()
 {
-#ifdef _WIN32
-  static const std::string netplay_dolphin_ver = SCM_DESC_STR " " " Win";
-#elif __APPLE__
-  static const std::string netplay_dolphin_ver = SCM_DESC_STR " " " Mac";
-#else
-  static const std::string netplay_dolphin_ver = SCM_DESC_STR " " " Lin";
-#endif
+  static const std::string netplay_dolphin_ver = EMULATOR_NAME;
   return netplay_dolphin_ver;
 }
 

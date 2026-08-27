@@ -194,9 +194,9 @@ jobs:
       run: |
         sed -i '/^[[:space:]]*tag:[[:space:]]/d' Distribution/flatpak/flatpak.yml
         sed -i '/^[[:space:]]*commit:[[:space:]]/d' Distribution/flatpak/flatpak.yml
-        sed -i "/^[[:space:]]*url:[[:space:]]*https:\/\/github.com\/Project-Plus-Development-Team\/Project-Plus-Dolphin$/a\\        commit: ${GITHUB_SHA}" Distribution/flatpak/flatpak.yml
+        sed -i "/^[[:space:]]*url:[[:space:]]*https:\/\/github.com\/MinuseryGames\/Minusery-Dolphin$/a\\        commit: ${GITHUB_SHA}" Distribution/flatpak/flatpak.yml
         if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
-          sed -i "/^[[:space:]]*url:[[:space:]]*https:\/\/github.com\/Project-Plus-Development-Team\/Project-Plus-Dolphin$/a\\        tag: ${GITHUB_REF_NAME}" Distribution/flatpak/flatpak.yml
+          sed -i "/^[[:space:]]*url:[[:space:]]*https:\/\/github.com\/MinuseryGames\/Minusery-Dolphin$/a\\        tag: ${GITHUB_REF_NAME}" Distribution/flatpak/flatpak.yml
         fi
         grep -n "^[[:space:]]*\(tag:\|commit:\)" Distribution/flatpak/flatpak.yml
     - name: Run Flatpak Builder
