@@ -537,8 +537,7 @@
     <DataSysFiles Include="$(DolphinRootDir)Data\**\Games\**\*.*" />
 	<DataSysFiles Include="$(DolphinRootDir)Data\**\Launcher\**\*.*" />
     <DataSysFiles Include="$(DolphinRootDir)Data\**\Sys\**\*.*" />
-    <DataTxtFiles Include="$(DolphinRootDir)\COPYING" />
-    <DataLicenseFiles Include="$(DolphinRootDir)\LICENSES\*.*" />
+    <DataTxtFiles Include="$(DolphinRootDir)Data\portable.txt" />
     <BinaryFiles Include="$(TargetPath)" />
     <AllInputFiles Include="@(DataSysFiles);@(DataTxtFiles);@(DataLicenseFiles);@(BinaryFiles)" />
   </ItemGroup>
