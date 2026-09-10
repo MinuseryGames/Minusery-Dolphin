@@ -3,7 +3,7 @@
 branch=`echo ${GITHUB_REF##*/}`
 
 BUILDBIN=/dolphin/dolphin/build/Binaries
-BINFILE=Project+_Dolphin-x86_64.AppImage
+BINFILE=Brawl-Minus-Dolphin.AppImage
 LOG_FILE=$HOME/curl.log
 CXX=g++-9
 
