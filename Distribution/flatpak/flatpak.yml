@@ -4,8 +4,8 @@ runtime: org.kde.Platform
 runtime-version: 6.6
 sdk: org.kde.Sdk
 command: project-plus-dolphin-wrapper.sh
-rename-desktop-file: project-plus-dolphin.desktop
-rename-icon: project-plus-dolphin
+rename-desktop-file: brawl-minus-dolphin.desktop
+rename-icon: brawl-minus-dolphin
 finish-args:
   - --device=all # need for controllers
   # the file picker uses portals but the set
@@ -97,15 +97,15 @@ modules:
         url: https://github.com/Unrud/xdg-screensaver-shim/archive/0.0.2.tar.gz
         sha256: 0ed2a69fe6ee6cbffd2fe16f85116db737f17fb1e79bfb812d893cf15c728399
 
-  - name: project-plus-dolphin
+  - name: brawl-minus-dolphin
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DENABLE_ALSA=OFF
       - -DENABLE_SDL=ON
       - -DENABLE_EVDEV=ON
-      - -DDISTRIBUTOR=Project Plus Development Team
-      - -DCPACK_PACKAGE_CONTACT=Project Plus Development Team
+      - -DDISTRIBUTOR=Brawl Minus Development Team
+      - -DCPACK_PACKAGE_CONTACT=Brawl Minus Development Team
     cleanup:
       - /share/man
     sources:
