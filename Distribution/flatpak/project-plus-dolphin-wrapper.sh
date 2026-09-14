@@ -29,14 +29,14 @@ mkdir -p /var/config/brawl-minus-dolphin
 # fi
 
 echo "Copy dol files to user data directory if they don't already exist"
-cp -nr /app/share/brawl-minus-dolphin/sys/Wii/Launcher /var/data/brawl-minus-dolphin/user/Wii/
+cp -nr /app/share/project-plus-dolphin/sys/Wii/Launcher /var/data/project-plus-dolphin/user/Wii/
 
 echo "Copy user directory to Flatpak user data directory (Overwritting any files already there with any newer files)"
-cp -ru /app/share/brawl-minus-dolphin/user /var/data/brawl-minus-dolphin/
+cp -ru /app/share/project-plus-dolphin/user /var/data/brawl-plus-dolphin/
 
 # Create and set variables for the system and user HD textures creation dates
-SystemHDTexturesCreationDate=`stat --format="%W" /app/share/brawl-minus-dolphin/sys/Load/Textures/RSBE01`
-UserHDTexturesCreationDate=`stat --format="%W" /var/data/brawl-minus-dolphin/user/Load/Textures/RSBE01`
+SystemHDTexturesCreationDate=`stat --format="%W" /app/share/project-plus-dolphin/sys/Load/Textures/RSBE01`
+UserHDTexturesCreationDate=`stat --format="%W" /var/data/project-pluus-dolphin/user/Load/Textures/RSBE01`
 
 echo "Check if there are newer HD textures"
 if [ $SystemHDTexturesCreationDate -gt ${UserHDTexturesCreationDate:=0} ];
@@ -51,4 +51,4 @@ else
 fi
 
 # Launch Dolphin and point it to the user directory
-brawl-minus-dolphin -u /var/data/brawl-minus-dolphin/user "$@"
+project-plus-dolphin -u /var/data/project-plus-dolphin/user "$@"
