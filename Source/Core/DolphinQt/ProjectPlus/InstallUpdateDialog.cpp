@@ -1,5 +1,5 @@
 /*
-*  Project+ Dolphin Self-Updater
+*  Project+ Dolphin Self-Updater Mod for Brawl Minus
 *  Credit to the Mario Party Netplay team for the base code of this updater
 *  Copyright (C) 2025 Tabitha Hanegan <tabithahanegan.com>
 */
@@ -36,7 +36,7 @@ InstallUpdateDialog::InstallUpdateDialog(QWidget *parent, QString installationDi
       filename(filename),
       downloadUrl(downloadUrl) // Initialize member variables
 {
-    setWindowTitle(QStringLiteral("Project+ Dolphin - Updater"));
+    setWindowTitle(QStringLiteral("Brawl Minus Dolphin - Updater"));
     
     // Create UI components
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -291,6 +291,13 @@ void InstallUpdateDialog::install()
   this->stepLabel->setText(QStringLiteral("Finishing up..."));
   this->stepProgressBar->setValue(100);
 
+  {
+    const QDir extracted(extractDirectory);
+    const QStringList entries = extracted.entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
+    if (entries.size() == 1 && QFileInfo(extracted.filePath(entries.first())).isDir())
+      extractDirectory = extracted.filePath(entries.first());
+  }
+
   extractDirectory = QDir::toNativeSeparators(extractDirectory);
 
 #ifdef __APPLE__
@@ -378,12 +385,13 @@ bool InstallUpdateDialog::unzipFile(const std::string& zipFilePath, const std::s
         }
         
         // Skip Dolphin.ini to not wipe a user's config
-        std::string filename_str = file_info->filename;
-        if (filename_str.find("Dolphin.ini") != std::string::npos)
-        {
-          entry_status = mz_zip_reader_goto_next_entry(reader);
-          continue;
-        }
+		std::string filename_str = file_info->filename;
+		QString lower = QStringLiteral("/") + QString::fromStdString(filename_str).toLower();
+		if (filename_str.find("Dolphin.ini") != std::string::npos || lower.contains(QStringLiteral("/user/wii/title/")))
+		{
+		  entry_status = mz_zip_reader_goto_next_entry(reader);
+		  continue;
+		}
 
         std::string out_path = destDir + "/" + file_info->filename;
         if (file_info->filename[strlen(file_info->filename) - 1] == '/')

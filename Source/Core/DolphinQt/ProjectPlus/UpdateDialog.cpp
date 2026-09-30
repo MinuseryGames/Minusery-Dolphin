@@ -1,5 +1,5 @@
 /*
-*  Project+ Dolphin Self-Updater
+*  Project+ Dolphin Self-Updater Mod for Brawl Minus
 *  Credit to the Mario Party Netplay team for the base code of this updater
 *  Copyright (C) 2025 Tabitha Hanegan <tabithahanegan.com>
 */
@@ -28,7 +28,7 @@
 
 using namespace UserInterface::Dialog;
 
-UpdateDialog::UpdateDialog(QWidget *parent, QJsonObject jsonObject, bool forced) 
+UpdateDialog::UpdateDialog(QWidget *parent, QJsonObject jsonObject, bool forced)
     : QDialog(parent)
 {
     this->jsonObject = jsonObject;
@@ -88,8 +88,8 @@ void UpdateDialog::accept()
         QString downloadUrl(object.value(QStringLiteral("browser_download_url")).toString());
 
         #ifdef _WIN32
-        if (filenameBlob.contains(QStringLiteral("Windows.Update")) || 
-            filenameBlob.contains(QStringLiteral("Windows")) || 
+        if (filenameBlob.contains(QStringLiteral("Windows.Update")) ||
+            filenameBlob.contains(QStringLiteral("Windows")) ||
             filenameBlob.contains(QStringLiteral("win64")))
         {
             filenameToDownload = filenameBlob;
@@ -98,7 +98,7 @@ void UpdateDialog::accept()
         }
         #endif
         #ifdef __APPLE__
-        if (filenameBlob.contains(QStringLiteral("macOS.Update")) || 
+        if (filenameBlob.contains(QStringLiteral("macOS.Update")) ||
             filenameBlob.contains(QStringLiteral("macOS")))
         {
             filenameToDownload = filenameBlob;
@@ -115,7 +115,8 @@ void UpdateDialog::accept()
 
     // Use InstallUpdateDialog for both download and extraction
     QString installationDirectory = QCoreApplication::applicationDirPath();
-    QString temporaryDirectory = QDir::tempPath();
+	QString temporaryDirectory = QDir::tempPath() + QStringLiteral("/MinuseryDolphinUpdate");
+	QDir().mkpath(temporaryDirectory);
     InstallUpdateDialog installDialog(this, installationDirectory, temporaryDirectory, filenameToDownload, urlToDownload);
     installDialog.exec();
 }
