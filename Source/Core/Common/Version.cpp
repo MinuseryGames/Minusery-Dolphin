@@ -9,7 +9,8 @@
 
 namespace Common
 {
-#define EMULATOR_NAME "Brawl Minus Dolphin v5.1.5"
+#define RELEASE_VERSION "v5.1.5"
+#define EMULATOR_NAME "Brawl Minus Dolphin " RELEASE_VERSION
 
 #ifdef _DEBUG
 #define BUILD_TYPE_STR "Debug "
@@ -29,6 +30,12 @@ const std::string& GetScmRevStr()
 {
   static const std::string scm_rev_str = EMULATOR_NAME;
   return scm_rev_str;
+}
+
+const std::string& GetReleaseVersionStr()
+{
+  static const std::string release_version_str = RELEASE_VERSION;
+  return release_version_str;
 }
 
 const std::string& GetScmRevGitStr()
