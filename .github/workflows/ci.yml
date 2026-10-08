@@ -227,10 +227,10 @@ jobs:
         fetch-tags: true
     - name: Set Version
       run: |
-        git fetch --tags --force
         if [ "$GITHUB_REF_TYPE" = "tag" ]; then
           VERSION="$GITHUB_REF_NAME"
         elif command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
+          git fetch --tags --force
           DESCRIBE=$(git describe --always --long --dirty)
           VERSION=$(echo "$DESCRIBE" | sed -E 's/(-0)?-[^-]+((-dirty)?)$/\2/')
         else
