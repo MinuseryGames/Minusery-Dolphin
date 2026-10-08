@@ -16,7 +16,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v6
       with:
-        repository: MinuseryGames/Minusery-Dolphin
         ref: master
         fetch-depth: 0
         submodules: recursive
@@ -25,6 +24,7 @@ jobs:
     - name: Set Version
       shell: pwsh
       run: |
+        git fetch --tags --force
         if ($env:GITHUB_REF_TYPE -eq 'tag') {
           $version = $env:GITHUB_REF_NAME
         } else {
@@ -227,6 +227,7 @@ jobs:
         fetch-tags: true
     - name: Set Version
       run: |
+        git fetch --tags --force
         if [ "$GITHUB_REF_TYPE" = "tag" ]; then
           VERSION="$GITHUB_REF_NAME"
         elif command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
