@@ -36,6 +36,12 @@ jobs:
       run: cmake -S . -B build -A x64 "-DCMAKE_TOOLCHAIN_FILE=CMake/DolphinToolchain.cmake" -DARCH=x86_64
     - name: Build
       run: cmake --build build --config Release --parallel
+    - name: Flatten Release Folder
+      shell: pwsh
+      run: |
+        Move-Item Binary/x64/Release/* Binary/x64/ -Force
+        Remove-Item Binary/x64/Release
+        Copy-Item Data/portable.txt Binary/x64/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v7
       with:
