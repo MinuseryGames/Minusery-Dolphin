@@ -789,7 +789,13 @@ void NetPlayClient::OnPadBufferMinimum(sf::Packet& packet)
 {
   u32 size = 0;
   packet >> size;
-  
+
+  if (size > MAX_TARGET_PAD_BUFFER_SIZE)
+  {
+    WARN_LOG_FMT(NETPLAY, "Ignoring invalid pad buffer size {}.", size);
+    return;
+  }
+
   m_minimum_buffer_size = size;
     m_dialog->OnMinimumPadBufferChanged(size);
 
@@ -1256,12 +1262,18 @@ void NetPlayClient::OnSyncSaveDataWii(sf::Packet& packet)
     WiiSave::Header header;
     packet >> header.tid;
     packet >> header.banner_size;
+    if (!packet || header.banner_size > sizeof(header.banner))
+    {
+      WARN_LOG_FMT(NETPLAY, "Received invalid Wii save banner size.");
+      SyncSaveDataResponse(false);
+      return;
+    }
     packet >> header.permissions;
     packet >> header.unk1;
     for (u8& byte : header.md5)
       packet >> byte;
     packet >> header.unk2;
-    for (size_t i = 0; i < std::min<size_t>(header.banner_size, sizeof(header.banner)); i++)
+    for (size_t i = 0; i < header.banner_size; i++)
       packet >> header.banner[i];
 
     // BkHeader
