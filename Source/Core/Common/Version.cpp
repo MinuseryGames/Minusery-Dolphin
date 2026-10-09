@@ -9,7 +9,7 @@
 
 namespace Common
 {
-#define RELEASE_VERSION "v5.1.5"
+#define RELEASE_VERSION "v5.1.5t"
 #define EMULATOR_NAME "Brawl Minus Dolphin " RELEASE_VERSION
 
 #ifdef _DEBUG
