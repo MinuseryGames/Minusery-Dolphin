@@ -69,7 +69,3 @@ configure_source_file("Source/Core/Common/scmrev.h")
 if(APPLE)
   configure_source_file("Source/Core/VersionInfo.plist")
 endif()
-
-if(LINUX)
-  configure_source_file("Distribution/flatpak/io.github.MinuseryGames.BrawlMinusDolphin.metainfo.xml")
-endif()
