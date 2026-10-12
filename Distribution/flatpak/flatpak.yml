@@ -1,9 +1,9 @@
-app-id: org.projectplusgame.project-plus-dolphin
+app-id: io.github.MinuseryGames.BrawlMinusDolphin
 branch: master
 runtime: org.kde.Platform
 runtime-version: 6.6
 sdk: org.kde.Sdk
-command: project-plus-dolphin-wrapper.sh
+command: brawl-minus-dolphin
 rename-desktop-file: project-plus-dolphin.desktop
 rename-icon: project-plus-dolphin
 finish-args:
@@ -106,6 +106,7 @@ modules:
       - -DENABLE_EVDEV=ON
       - -DDISTRIBUTOR=Brawl Minus Development Team
       - -DCPACK_PACKAGE_CONTACT=Brawl Minus Development Team
+      - -Ddatadir:PATH=/app/share/brawl-minus-dolphin
     cleanup:
       - /share/man
     sources:
@@ -134,11 +135,11 @@ modules:
 
       # Script that is ran everytime the final Flatpak starts
       - type: file
-        path: project-plus-dolphin-wrapper.sh
+        path: brawl-minus-dolphin-wrapper.sh
         
       # Metadata file for Flatpak repos
       - type: file
-        path: org.projectplusgame.project-plus-dolphin.metainfo.xml
+        path: io.github.MinuseryGames.BrawlMinusDolphin.metainfo.xml
 
       # detects whether dolphin is running in a flatpak sandbox
       # and makes it use xdg directories if it is.
@@ -156,15 +157,15 @@ modules:
       #  dest-filename: project-plus-dolphin-wrapper
     post-install:
       - |
-      - install -D -t ${FLATPAK_DEST}/bin/ project-plus-dolphin-wrapper.sh
-      - desktop-file-edit --set-key=Exec --set-value='/app/bin/project-plus-dolphin-wrapper.sh'
+      - install -Dm755 brawl-minus-dolphin-wrapper.sh ${FLATPAK_DEST}/bin/brawl-minus-dolphin
+      - desktop-file-edit --set-key=Exec --set-value='/app/bin/brawl-minus-dolphin'
         /app/share/applications/project-plus-dolphin.desktop
       - desktop-file-edit --set-key=Name --set-value='Brawl Minus Dolphin'
         /app/share/applications/project-plus-dolphin.desktop
-      - rm -r ${FLATPAK_DEST}/share/project-plus-dolphin/sys                                                                                       # Remove preinstalled sys directory
-      - mv Data/Sys ${FLATPAK_DEST}/share/project-plus-dolphin/sys/                                                                                # Move Sys directory to correct location (only use without the -DLINUX_LOCAL_DEV=true flag set
-      #- tar --transform="s|sd.raw|WiiSD.raw|" -xf sd.tar.gz -C ${FLATPAK_DEST}/share/project-plus-dolphin/user/Wii/                               # Extract, rename and move SD card to correct location
-      #- mv Launcher ${FLATPAK_DEST}/share/project-plus-dolphin/sys/Wii/                                                                            # Move Launcher directory to correct location
-      #- mkdir -p ${FLATPAK_DEST}/share/project-plus-dolphin/sys/Load/Textures                                                                      # Make directory for HD textures
-      #- mv "ModPack/Full Quality HD Textures" ${FLATPAK_DEST}/share/project-plus-dolphin/sys/Load/Textures/RSBE01/                              	  # Move HD Textures from ModPack to correct location
-      - install -Dm644 org.projectplusgame.project-plus-dolphin.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/                                    # Install metainfo file
+      - rm -r ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys                                                                                       # Remove preinstalled sys directory
+      - mv Data/Sys ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/                                                                                # Move Sys directory to correct location (only use without the -DLINUX_LOCAL_DEV=true flag set
+      #- tar --transform="s|sd.raw|WiiSD.raw|" -xf sd.tar.gz -C ${FLATPAK_DEST}/share/brawl-minus-dolphin/user/Wii/                               # Extract, rename and move SD card to correct location
+      #- mv Launcher ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/Wii/                                                                            # Move Launcher directory to correct location
+      #- mkdir -p ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/Load/Textures                                                                      # Make directory for HD textures
+      #- mv "ModPack/Full Quality HD Textures" ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/Load/Textures/RSBE01/                                        # Move HD Textures from ModPack to correct location
+      - install -Dm644 io.github.MinuseryGames.BrawlMinusDolphin.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/                                    # Install metainfo filels D

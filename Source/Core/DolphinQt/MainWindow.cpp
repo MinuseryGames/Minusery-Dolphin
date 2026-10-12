@@ -1471,6 +1471,10 @@ void MainWindow::ShowUpdateDialog()
 
 void MainWindow::CheckForUpdatesAuto()
 {
+#if !defined(_WIN32) && !defined(__APPLE__)
+    return;
+#endif
+
     Common::HttpRequest httpRequest;
 
     auto response = httpRequest.Get("https://api.github.com/repos/MinuseryGames/Minusery-Dolphin/releases/latest");
