@@ -167,5 +167,5 @@ modules:
       #- tar --transform="s|sd.raw|WiiSD.raw|" -xf sd.tar.gz -C ${FLATPAK_DEST}/share/brawl-minus-dolphin/user/Wii/                               # Extract, rename and move SD card to correct location
       #- mv Launcher ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/Wii/                                                                            # Move Launcher directory to correct location
       #- mkdir -p ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/Load/Textures                                                                      # Make directory for HD textures
-      #- mv "ModPack/Full Quality HD Textures" ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/Load/Textures/RSBE01/                                        # Move HD Textures from ModPack to correct location
-      - install -Dm644 io.github.MinuseryGames.BrawlMinusDolphin.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/                                    # Install metainfo filels D
+      #- mv "ModPack/Full Quality HD Textures" ${FLATPAK_DEST}/share/brawl-minus-dolphin/Sys/Load/Textures/RSBE01/                                  # Move HD Textures from ModPack to correct location
+      - install -Dm644 io.github.MinuseryGames.BrawlMinusDolphin.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/                                    # Install metainfo file
