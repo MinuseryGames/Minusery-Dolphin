@@ -341,7 +341,7 @@ struct VideoConfig final
   int iCommandBufferExecuteInterval = 0;
 
   // Shader compilation settings.
-  bool bWaitForShadersBeforeStarting = false;
+  bool bWaitForShadersBeforeStarting = true;
   ShaderCompilationMode iShaderCompilationMode{};
 
   // Number of shader compiler threads.
